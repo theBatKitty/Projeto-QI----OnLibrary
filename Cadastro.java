@@ -1,36 +1,78 @@
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Cadastro extends Application {
-    @Override
-    public void start(Stage stage) {
-        Label lblTitulo = new Label("Cadastro de Usuário");
-        lblTitulo.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
-        
-        TextField txtNome = new TextField();
-        txtNome.setPromptText("Digite seu nome");
-        
-        TextField txtEmail = new TextField();
-        txtEmail.setPromptText("Digite seu e-mail");
+public class TelaCadastro extends JFrame {
+    private JTextField campoNome;
+    private JTextField campoEmail;
+    private JTextField campoDataNascimento;
+    private JPasswordField campoSenha;
+    private JPasswordField campoConfirmarSenha;
+    private JButton botaoCadastrar;
+    private JButton botaoLimpar;
 
-        Button btnCadastrar = new Button("Cadastrar");
-        btnCadastrar.setStyle("-fx-background-color: #FF6F61; -fx-text-fill: white;");
+    public TelaCadastro() {
+        setTitle("Cadastro - OnLibras");
+        setSize(400, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(7, 1));
 
-        btnCadastrar.setOnAction(e -> System.out.println("Cadastrado: " + txtNome.getText() + ", " + txtEmail.getText()));
+        campoNome = new JTextField();
+        campoEmail = new JTextField();
+        campoDataNascimento = new JTextField("dd/mm/aaaa");
+        campoSenha = new JPasswordField();
+        campoConfirmarSenha = new JPasswordField();
 
-        VBox layout = new VBox(10, lblTitulo, txtNome, txtEmail, btnCadastrar);
-        layout.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-spacing: 15;");
-        
-        Scene scene = new Scene(layout, 300, 250);
-        stage.setScene(scene);
-        stage.setTitle("Cadastro");
-        stage.show();
+        botaoCadastrar = new JButton("Cadastrar");
+        botaoLimpar = new JButton("Limpar campos");
+
+        add(new JLabel("Nome completo:"));
+        add(campoNome);
+        add(new JLabel("Email:"));
+        add(campoEmail);
+        add(new JLabel("Data de nascimento:"));
+        add(campoDataNascimento);
+        add(new JLabel("Senha:"));
+        add(campoSenha);
+        add(new JLabel("Confirmação da senha:"));
+        add(campoConfirmarSenha);
+        add(botaoCadastrar);
+        add(botaoLimpar);
+
+        botaoCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nome = campoNome.getText();
+                String email = campoEmail.getText();
+                String dataNascimento = campoDataNascimento.getText();
+                String senha = new String(campoSenha.getPassword());
+                String confirmarSenha = new String(campoConfirmarSenha.getPassword());
+
+                if (senha.equals(confirmarSenha)) {
+                    JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "As senhas não conferem!");
+                }
+            }
+        });
+
+        botaoLimpar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                campoNome.setText("");
+                campoEmail.setText("");
+                campoDataNascimento.setText("dd/mm/aaaa");
+                campoSenha.setText("");
+                campoConfirmarSenha.setText("");
+            }
+        });
     }
 
     public static void main(String[] args) {
-        launch();
+        SwingUtilities.invokeLater(() -> {
+            TelaCadastro tela = new TelaCadastro();
+            tela.setVisible(true);
+        });
     }
 }
